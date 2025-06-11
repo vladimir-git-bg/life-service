@@ -5,17 +5,34 @@ on:
     - cron: '0 0 * * *'      # раз в сутки (полночь UTC)
   workflow_dispatch:
 
+# Добавляем права на запись
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Используем токен с правами на запись
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Append line
         run: |
           echo "$(date +%F) → STILL HAVING FUN" >> README.md
+      
       - name: Commit & push
         run: |
-          git config user.name  "life-bot"
+          git config user.name "life-bot"
           git config user.email "bot@localhost"
-          git commit -am "daily fun tick" || echo "No changes"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          
+          # Проверяем есть ли изменения
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git add README.md
+          git commit -m "daily fun tick"
+          git push
