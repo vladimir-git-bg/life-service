@@ -2,7 +2,7 @@
 name: life-watchdog
 on:
   schedule:
-    - cron: '0 0 * * *'      # раз в сутки (полночь UTC)
+    - cron: '0 0 * * *'      # раз в сутки (полночь UTC).
   workflow_dispatch:
 
 # Добавляем права на запись
