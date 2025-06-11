@@ -1,0 +1,21 @@
+# .github/workflows/fun.yml
+name: life-watchdog
+on:
+  schedule:
+    - cron: '0 0 * * *'      # раз в сутки (полночь UTC)
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Append line
+        run: |
+          echo "$(date +%F) → STILL HAVING FUN" >> README.md
+      - name: Commit & push
+        run: |
+          git config user.name  "life-bot"
+          git config user.email "bot@localhost"
+          git commit -am "daily fun tick"
+          git push
