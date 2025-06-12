@@ -20,7 +20,7 @@ jobs:
       
       - name: Append line
         run: |
-          echo "$(date +%F) → STILL HAVING FUN" >> README.md
+          echo "- $(date +'%F') → STILL HAVING FUN" >> README.md
       
       - name: Commit & push
         run: |
